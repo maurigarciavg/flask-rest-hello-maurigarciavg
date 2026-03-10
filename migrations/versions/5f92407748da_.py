@@ -23,7 +23,7 @@ def upgrade():
     sa.Column('type', sa.String(length=50), nullable=False),
     sa.Column('url', sa.String(length=120), nullable=False),
     sa.Column('post_id', sa.Integer(), nullable=False),
-    sa.ForeignKeyConstraint(['post_id'], ['post.id'], ),
+    sa.ForeignKeyConstraint(['post_id'], ['post.id'], ),  # 🔧 Asegúrate de que 'post' sea el nombre correcto de la tabla
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
