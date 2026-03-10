@@ -7,20 +7,20 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
-    __tablename__ = 'user'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    first_name: Mapped[str] = mapped_column(String(120), nullable=False)
-    last_name: Mapped[str] = mapped_column(String(120), nullable=False)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(String(80), nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
+    __tablename__ = 'user'  // ✅ Definición correcta de la tabla
+    id: Mapped[int] = mapped_column(primary_key=True)  // ✅ Campo ID como clave primaria
+    user_name: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)  // 📝 Cambié 'username' a 'user_name' para evitar confusión
+    first_name: Mapped[str] = mapped_column(String(120), nullable=False)  // 📝 Cambié 'firstname' a 'first_name' para mantener consistencia
+    last_name: Mapped[str] = mapped_column(String(120), nullable=False)  // 📝 Cambié 'lastname' a 'last_name' para mantener consistencia
+    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)  // ✅ Campo de email único
+    password: Mapped[str] = mapped_column(String(80), nullable=False)  // 📝 Considera aumentar la longitud de la contraseña para mayor seguridad
+    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)  // ✅ Campo para indicar si el usuario está activo
     # Relaciones basicas
-    posts: Mapped[List["Post"]] = relationship(back_populates="author")
-    comments: Mapped[List["Comment"]] = relationship(back_populates="author")
+    posts: Mapped[List["Post"]] = relationship(back_populates="author")  // ✅ Relación con posts
+    comments: Mapped[List["Comment"]] = relationship(back_populates="author")  // ✅ Relación con comentarios
     #  Relaciones de seguimiento
-    followers: Mapped[List["Follower"]] = relationship(back_populates="user_to", foreign_keys="Follower.user_to_id")
-    following: Mapped[List["Follower"]] = relationship(back_populates="user_from", foreign_keys="Follower.user_from_id")
+    followers: Mapped[List["Follower"]] = relationship(back_populates="user_to", foreign_keys="Follower.user_to_id")  // 📝 Asegúrate de que 'user_to' esté definido correctamente en Follower
+    following: Mapped[List["Follower"]] = relationship(back_populates="user_from", foreign_keys="Follower.user_from_id")  // 📝 Asegúrate de que 'user_from' esté definido correctamente en Follower
 
     def serialize(self):
         return {
@@ -33,13 +33,13 @@ class User(db.Model):
 
 
 class Post(db.Model):
-    __tablename__ = 'post'
-    id: Mapped[int] = mapped_column(primary_key=True)
+    __tablename__ = 'post'  // ✅ Definición correcta de la tabla
+    id: Mapped[int] = mapped_column(primary_key=True)  // ✅ Campo ID como clave primaria
     # Relaciones basicas
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    author: Mapped["User"] = relationship(back_populates="posts")
-    media: Mapped[List["Media"]] = relationship(back_populates="post")
-    comments: Mapped[List["Comment"]] = relationship(back_populates="post")
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  // ✅ Relación con el usuario
+    author: Mapped["User"] = relationship(back_populates="posts")  // ✅ Relación con el autor
+    media: Mapped[List["Media"]] = relationship(back_populates="post")  // ✅ Relación con media
+    comments: Mapped[List["Comment"]] = relationship(back_populates="post")  // ✅ Relación con comentarios
 
     def serialize(self):
         return {
@@ -49,13 +49,13 @@ class Post(db.Model):
 
 
 class Media(db.Model):
-    __tablename__ = 'media'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    type: Mapped[str] = mapped_column(String(50), nullable=False)
-    url: Mapped[str] = mapped_column(String(120), nullable=False)
+    __tablename__ = 'media'  // ✅ Definición correcta de la tabla
+    id: Mapped[int] = mapped_column(primary_key=True)  // ✅ Campo ID como clave primaria
+    type: Mapped[str] = mapped_column(String(50), nullable=False)  // ✅ Campo para tipo de media
+    url: Mapped[str] = mapped_column(String(120), nullable=False)  // ✅ Campo para URL de media
     # Relaciones basicas
-    post_id: Mapped[int] = mapped_column(ForeignKey("post.id"), nullable=False)
-    post: Mapped["Post"] = relationship(back_populates="media")
+    post_id: Mapped[int] = mapped_column(ForeignKey("post.id"), nullable=False)  // ✅ Relación con post
+    post: Mapped["Post"] = relationship(back_populates="media")  // ✅ Relación con post
 
     def serialize(self):
         return {
@@ -65,14 +65,14 @@ class Media(db.Model):
         }
 
 class Comment(db.Model):
-    __tablename__ = 'comment'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    comment_text: Mapped[str] = mapped_column(String(500), nullable=False)
+    __tablename__ = 'comment'  // ✅ Definición correcta de la tabla
+    id: Mapped[int] = mapped_column(primary_key=True)  // ✅ Campo ID como clave primaria
+    comment_text: Mapped[str] = mapped_column(String(500), nullable=False)  // ✅ Campo para texto del comentario
     # Relaciones basicas
-    author_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    post_id: Mapped[int] = mapped_column(ForeignKey("post.id"), nullable=False)
-    author: Mapped["User"] = relationship(back_populates="comments")
-    post: Mapped["Post"] = relationship(back_populates="comments")
+    author_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  // ✅ Relación con el autor
+    post_id: Mapped[int] = mapped_column(ForeignKey("post.id"), nullable=False)  // ✅ Relación con el post
+    author: Mapped["User"] = relationship(back_populates="comments")  // ✅ Relación con el autor
+    post: Mapped["Post"] = relationship(back_populates="comments")  // ✅ Relación con el post
 
     def serialize(self):
         return {
@@ -81,13 +81,13 @@ class Comment(db.Model):
         }
 
 class Follower(db.Model):
-    __tablename__ = 'follower'
-    id: Mapped[int] = mapped_column(primary_key=True)
+    __tablename__ = 'follower'  // ✅ Definición correcta de la tabla
+    id: Mapped[int] = mapped_column(primary_key=True)  // ✅ Campo ID como clave primaria
     # Relaciones de seguimiento
-    user_from_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    user_to_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)
-    user_from: Mapped["User"] = relationship(back_populates="following", foreign_keys=[user_from_id])
-    user_to: Mapped["User"] = relationship(back_populates="followers", foreign_keys=[user_to_id])
+    user_from_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  // ✅ Relación con el usuario que sigue
+    user_to_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  // ✅ Relación con el usuario seguido
+    user_from: Mapped["User"] = relationship(back_populates="following", foreign_keys=[user_from_id])  // ✅ Relación con el usuario que sigue
+    user_to: Mapped["User"] = relationship(back_populates="followers", foreign_keys=[user_to_id])  // ✅ Relación con el usuario seguido
 
     def serialize(self):
         return {

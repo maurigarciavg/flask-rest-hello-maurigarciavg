@@ -1,8 +1,10 @@
 {
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true, // ✅ Bien hecho, esta opción es útil para mantener el código limpio.
+  "editor.defaultFormatter": "esbenp.prettier-vscode", // ✅ Excelente elección de formateador.
   "workbench.editorAssociations": {
-    "*.md": "vscode.markdown.preview.editor"
+    "*.md": "vscode.markdown.preview.editor" // ✅ Buena asociación para archivos Markdown.
   },
-  "python-envs.defaultEnvManager": "ms-python.python:pipenv"
+  // 🔧 El siguiente ajuste es innecesario en este archivo de configuración.
+  // 💡 Considera mover configuraciones específicas de Python a otro archivo.
+  "python-envs.defaultEnvManager": "ms-python.python:pipenv" // ❌ Esto puede causar problemas si no está soportado aquí.
 }
